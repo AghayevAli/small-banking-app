@@ -1,0 +1,284 @@
+{
+	"info": {
+		"_postman_id": "cc560dcb-8610-4b4e-b639-0661e250101a",
+		"name": "Small Banking Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11547424",
+		"_collection_link": "https://kapitalopenbanking.postman.co/workspace/FNPL~8aec94fc-b2cb-4ca8-b0b1-00a22a3d0a3f/collection/11547424-cc560dcb-8610-4b4e-b639-0661e250101a?action=share&source=collection_link&creator=11547424"
+	},
+	"item": [
+		{
+			"name": "api-gateway",
+			"item": [
+				{
+					"name": "Create Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									"",
+									"",
+									"let response = pm.response.json();",
+									"",
+									"if (response.customerId) {",
+									"    pm.collectionVariables.set(\"customerId\", response.customerId);",
+									"    console.log(\"Customer ID saved to environment:\", response.customerId);",
+									"} else {",
+									"    console.log(\"Customer ID not found in response.\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Elton\",\n  \"surname\": \"Qubadov\",\n  \"phoneNumber\": \"+994502234521\",\n  \"birthDate\": \"1999-06-15\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/v1/customers",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"customers"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Customer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/api/v1/customers/{{customerId}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"customers",
+								"{{customerId}}"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Top-up",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Customer-Id",
+								"value": "{{customerId}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\" : 30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/v1/transactions/top-up",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"top-up"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Purchase",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									"",
+									"let response = pm.response.json();",
+									"",
+									"if (response.transactionId) {",
+									"    pm.collectionVariables.set(\"lastPurchasedTransactionId\", response.transactionId);",
+									"    console.log(\"Last purchased transaction ID saved to environment:\", response.transactionId);",
+									"} else {",
+									"    console.log(\"Last purchased transaction ID not found in response.\");",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Customer-Id",
+								"value": "{{customerId}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\" : 15\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/v1/transactions/purchase",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"purchase"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				},
+				{
+					"name": "Partial Refund",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Customer-Id",
+								"value": "{{customerId}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"transactionId\": \"{{lastPurchasedTransactionId}}\",\n    \"amount\": 5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/api/v1/transactions/refund",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"refund"
+							]
+						},
+						"description": "This is a POST request, submitting data to an API via the request body. This request submits JSON data, and the data is reflected in the response.\n\nA successful POST request typically returns a `200 OK` or `201 Created` response code."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "customerId",
+			"value": ""
+		},
+		{
+			"key": "lastPurchasedTransactionId",
+			"value": ""
+		}
+	]
+}

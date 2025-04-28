@@ -1,0 +1,60 @@
+services:
+  db_customer:
+    image: postgres
+    container_name: db_customer
+    restart: always
+    environment:
+      POSTGRES_DB: customerdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_customer_data:/var/lib/postgresql/data
+
+  db_transaction:
+    image: postgres
+    container_name: db_transaction
+    restart: always
+    environment:
+      POSTGRES_DB: transactiondb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_transaction_data:/var/lib/postgresql/data
+
+  ms-customer:
+    image: sbs/ms-customer:1.0
+    build:
+      context: ./ms-customer
+    container_name: ms-customer
+    depends_on:
+      - db_customer
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_customer:5432/customerdb
+
+  ms-transaction:
+    image: sbs/ms-transaction:1.0
+    build:
+      context: ./ms-transaction
+    container_name: ms-transaction
+    depends_on:
+      - db_transaction
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_transaction:5432/transactiondb
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+    container_name: api-gateway
+    ports:
+      - "8081:8080"
+    depends_on:
+      - ms-customer
+      - ms-transaction
+
+volumes:
+  postgres_customer_data:
+  postgres_transaction_data:

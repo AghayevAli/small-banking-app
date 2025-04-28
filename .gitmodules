@@ -1,0 +1,9 @@
+[submodule "api-gateway"]
+	path = api-gateway
+	url = https://github.com/AghayevAli/api-gateway.git
+[submodule "ms-transaction"]
+	path = ms-transaction
+	url = https://github.com/AghayevAli/ms-transaction.git
+[submodule "ms-customer"]
+	path = ms-customer
+	url = https://github.com/AghayevAli/ms-customer.git
